@@ -1,4 +1,4 @@
-cmd = ./cmd/template/
+cmd = ./cmd/evo/
 output = ./bin/
 
 all = build run
