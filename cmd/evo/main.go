@@ -47,17 +47,17 @@ func run() {
 	}
 
 	for !win.Closed() {
-		imd.Clear()
+		// imd.Clear()
 
-		for _, c := range cells {
-			c.Move()
+		// for _, c := range cells {
+		// 	c.Move()
 
-			imd.Color = c.Color
-			imd.Push(
-				c.Position,
-			)
-			imd.Circle(c.Radius, 0)
-		}
+		// 	imd.Color = c.Color
+		// 	imd.Push(
+		// 		c.Position,
+		// 	)
+		// 	imd.Circle(c.Radius, 0)
+		// }
 
 		win.Clear(colornames.Black)
 		imd.Draw(win)
