@@ -17,7 +17,7 @@ type Cell struct {
 }
 
 func NewCell(position pixel.Vec, color color.Color, radius float64) *Cell {
-	return &Cell{position, color, radius, 0}
+	return &Cell{CellPosition(position), color, radius, 0}
 }
 
 func GenerateCells(count int, bounds pixel.Rect) []*Cell {
@@ -25,7 +25,7 @@ func GenerateCells(count int, bounds pixel.Rect) []*Cell {
 	for i := 0; i < count; i++ {
 		cells = append(
 			cells,
-			NewCell(utils.RandPosition(bounds), utils.RandColor(), utils.RandBetween(1, 3)),
+			NewCell(utils.RandPosition(bounds), colornames.Red, utils.RandBetween(1, 3)),
 		)
 	}
 	return cells
