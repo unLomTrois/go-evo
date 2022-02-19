@@ -46,30 +46,66 @@ func run() {
 		imd.Circle(utils.RandBetween(1, 3), 0)
 	}
 
+	// bounds of simulation
+	simbounds := cfg.Bounds //cfg.Bounds.Resized(cfg.Bounds.Center(), pixel.V(cfg.Bounds.W()-100, cfg.Bounds.H()-100))
+
 	for !win.Closed() {
-		// imd.Clear()
-
-		// for _, c := range cells {
-		// 	c.Move()
-
-		// 	imd.Color = c.Color
-		// 	imd.Push(
-		// 		c.Position,
-		// 	)
-		// 	imd.Circle(c.Radius, 0)
-		// }
-
 		win.Clear(colornames.Black)
+		imd.Clear()
+
+		for _, c := range cells {
+			c.Move()
+
+			if !simbounds.Contains(c.Position) {
+				lin := pixel.L(c.Position, c.NextPosition())
+
+				intersec := simbounds.IntersectionPoints(lin.Scaled(5))
+
+				if len(intersec) > 0 {
+					// var edge pixel.Line
+					for i, e := range simbounds.Edges() {
+						// fmt.Println(i, e)
+						if _, ok := lin.Scaled(5).Intersect(e); ok {
+							if i == 0 {
+								c.Position = pixel.V(simbounds.Max.X, intersec[0].Y)
+							}
+							if i == 2 {
+								c.Position = pixel.V(simbounds.Min.X, intersec[0].Y)
+							}
+							if i == 1 {
+								c.Position = pixel.V(intersec[0].X, simbounds.Min.Y)
+							}
+							if i == 3 {
+								c.Position = pixel.V(intersec[0].X, simbounds.Max.Y)
+							}
+						}
+					}
+				}
+
+				// c.Direction *= -1
+				// c.Move()
+			}
+
+			imd.Color = c.Color
+			imd.Push(
+				c.Position,
+			)
+			imd.Circle(c.Radius, 0)
+		}
+
 		imd.Draw(win)
-		win.Update()
 
 		// fps
 		frames++
 		select {
 		case <-second:
-			win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, frames))
+			win.SetTitle(fmt.Sprintf("FPS: %d", frames))
 			frames = 0
+
 		default:
 		}
+
+		win.Update()
+
 	}
 }
