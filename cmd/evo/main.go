@@ -2,7 +2,6 @@ package main
 
 import (
 	"evo/internal/app/cellmap"
-	"evo/internal/app/simulation"
 	"evo/internal/app/utils"
 	"fmt"
 	"math/rand"
@@ -36,48 +35,32 @@ func run() {
 		second = time.Tick(time.Second)
 	)
 
-	cells := simulation.GenerateCells(100, cfg.Bounds)
-
-	// fmt.Println(cells[0])
-	// fmt.Println(reflect.TypeOf(cells[0]))
-
-	// for key, value := range chmap {
-	// 	fmt.Println(key, value)
-	// }
-	chmap := cellmap.New()
+	cmap := cellmap.New(cfg.Bounds)
 
 	imd := imdraw.New(nil)
-	for _, c := range cells {
-		chmap.Put(c)
-
-		imd.Color = c.Color
-		imd.Push(
-			c.Position,
-		)
-		imd.Circle(utils.RandBetween(1, 3), 0)
-	}
-
-	// first := &cells[0]
-	// for _, value := range chmap.Values() {
-	// 	fmt.Println(value)
-	// }
 
 	// bounds of simulation
 	simbounds := cfg.Bounds //cfg.Bounds.Resized(cfg.Bounds.Center(), pixel.V(cfg.Bounds.W()-100, cfg.Bounds.H()-100))
 
+	bounds := pixel.R(10, 10, 100, 100)
+
+	last := time.Now()
 	for !win.Closed() {
+		dt := time.Since(last).Seconds()
+		last = time.Now()
+
 		win.Clear(colornames.Black)
 		imd.Clear()
 
-		for _, c := range chmap.GetM() {
+		for _, c := range cmap.GetM() {
 			c.Move()
 
 			c.CrossBorder(simbounds)
 
-			imd.Color = c.Color
-			imd.Push(c.Position)
-			imd.Circle(c.Radius, 0)
+			c.Draw(imd)
 		}
+
+		utils.DrawBounds(imd, bounds, colornames.Red)
 
 		imd.Draw(win)
 
@@ -85,11 +68,11 @@ func run() {
 		frames++
 		select {
 		case <-second:
-			win.SetTitle(fmt.Sprintf("Cells: %d, FPS: %d", chmap.Size(), frames))
+			win.SetTitle(fmt.Sprintf("Cells: %d, FPS: %d, Delta: %f", cmap.Size(), frames, dt))
 			frames = 0
-			last := chmap.Keys()[chmap.Size()-1]
+			last := cmap.Keys()[cmap.Size()-1]
 
-			chmap.Remove(last)
+			cmap.Remove(last)
 			fmt.Println(last)
 
 		default:

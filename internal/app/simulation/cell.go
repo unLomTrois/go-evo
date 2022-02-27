@@ -1,4 +1,4 @@
-package simulation
+package sim
 
 import (
 	"evo/internal/app/utils"
@@ -6,6 +6,7 @@ import (
 	"math"
 
 	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/imdraw"
 )
 
 type Cell struct {
@@ -83,4 +84,8 @@ func (c *Cell) CrossBorder(bounds pixel.Rect) {
 			}
 		}
 	}
+}
+
+func (c *Cell) Draw(imd *imdraw.IMDraw) {
+	utils.DrawCircle(imd, c.Position, c.Radius, c.Color, 0)
 }
