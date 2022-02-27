@@ -72,40 +72,10 @@ func run() {
 		for _, c := range chmap.GetM() {
 			c.Move()
 
-			if !simbounds.Contains(c.Position) {
-				lin := pixel.L(c.Position, c.NextPosition())
-
-				intersec := simbounds.IntersectionPoints(lin.Scaled(5))
-
-				if len(intersec) > 0 {
-					// var edge pixel.Line
-					for i, e := range simbounds.Edges() {
-						// fmt.Println(i, e)
-						if _, ok := lin.Scaled(5).Intersect(e); ok {
-							if i == 0 {
-								c.Position = pixel.V(simbounds.Max.X, intersec[0].Y)
-							}
-							if i == 2 {
-								c.Position = pixel.V(simbounds.Min.X, intersec[0].Y)
-							}
-							if i == 1 {
-								c.Position = pixel.V(intersec[0].X, simbounds.Min.Y)
-							}
-							if i == 3 {
-								c.Position = pixel.V(intersec[0].X, simbounds.Max.Y)
-							}
-						}
-					}
-				}
-
-				// c.Direction *= -1
-				// c.Move()
-			}
+			c.CrossBorder(simbounds)
 
 			imd.Color = c.Color
-			imd.Push(
-				c.Position,
-			)
+			imd.Push(c.Position)
 			imd.Circle(c.Radius, 0)
 		}
 
@@ -126,6 +96,5 @@ func run() {
 		}
 
 		win.Update()
-
 	}
 }

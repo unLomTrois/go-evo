@@ -55,3 +55,32 @@ func (c *Cell) Move() {
 		c.Direction += utils.RandBetween(-0.01, 0.01)
 	}
 }
+
+// Перемещает клетку через границу карты на другую сторону
+func (c *Cell) CrossBorder(bounds pixel.Rect) {
+	if !bounds.Contains(c.Position) {
+		lin := pixel.L(c.Position, c.NextPosition())
+
+		intersec := bounds.IntersectionPoints(lin.Scaled(5))
+
+		if len(intersec) > 0 {
+			for i, e := range bounds.Edges() {
+				// fmt.Println(i, e)
+				if _, ok := lin.Scaled(5).Intersect(e); ok {
+					if i == 0 {
+						c.Position = pixel.V(bounds.Max.X, intersec[0].Y)
+					}
+					if i == 2 {
+						c.Position = pixel.V(bounds.Min.X, intersec[0].Y)
+					}
+					if i == 1 {
+						c.Position = pixel.V(intersec[0].X, bounds.Min.Y)
+					}
+					if i == 3 {
+						c.Position = pixel.V(intersec[0].X, bounds.Max.Y)
+					}
+				}
+			}
+		}
+	}
+}

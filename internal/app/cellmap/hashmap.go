@@ -8,25 +8,14 @@ type CellMap struct {
 	m map[**simulation.Cell]*simulation.Cell
 }
 
-// New instantiates a hash map.
 func New() *CellMap {
 	return &CellMap{m: make(map[**simulation.Cell]*simulation.Cell)}
 }
 
-// Put inserts element into the map.
-func (cm *CellMap) Put(value *simulation.Cell) {
-	cm.m[&value] = value
+func (m *CellMap) Put(value *simulation.Cell) {
+	m.m[&value] = value
 }
 
-// func (cm *CellMap) Values() []*simulation.Cell {
-// 	values := make([]*simulation.Cell, cm.Size())
-// 	for _, value := range cm.m {
-// 		values = append(values, value)
-// 	}
-// 	return values
-// }
-
-// // Values returns all values (random order).
 func (m *CellMap) Values() []*simulation.Cell {
 	values := make([]*simulation.Cell, m.Size())
 	count := 0
@@ -35,26 +24,6 @@ func (m *CellMap) Values() []*simulation.Cell {
 		count++
 	}
 	return values
-}
-
-func (m *CellMap) Size() int {
-	return len(m.m)
-}
-
-func (cm *CellMap) Get(key **simulation.Cell) (value *simulation.Cell, found bool) {
-	value, found = cm.m[key]
-	return
-}
-
-func (cm *CellMap) GetM() map[**simulation.Cell]*simulation.Cell {
-	return cm.m
-}
-
-func (cm *CellMap) Remove(key **simulation.Cell) {
-	delete(cm.m, key)
-	// value, _ := cm.Get(key)
-
-	// fmt.Println("DELETE", value)
 }
 
 func (m *CellMap) Keys() []**simulation.Cell {
@@ -67,44 +36,29 @@ func (m *CellMap) Keys() []**simulation.Cell {
 	return keys
 }
 
-// // Get searches the element in the map by key and returns its value or nil if key is not found in map.
-// // Second return parameter is true if key was found, otherwise false.
-// func (m *Map) Get(key interface{}) (value interface{}, found bool) {
-// 	value, found = m.m[key]
-// 	return
-// }
+func (m *CellMap) Size() int {
+	return len(m.m)
+}
 
-// // Remove removes the element from the map by key.
+func (m *CellMap) Get(key **simulation.Cell) (value *simulation.Cell, found bool) {
+	value, found = m.m[key]
+	return
+}
 
-// // Empty returns true if map does not contain any elements
-// func (m *Map) Empty() bool {
-// 	return m.Size() == 0
-// }
+func (m *CellMap) GetM() map[**simulation.Cell]*simulation.Cell {
+	return m.m
+}
 
-// // Size returns number of elements in the map.
+func (m *CellMap) Remove(key **simulation.Cell) {
+	if !m.IsEmpty() {
+		delete(m.m, key)
+	}
+}
 
-// // Keys returns all keys (random order).
-//
+func (m *CellMap) IsEmpty() bool {
+	return m.Size() == 0
+}
 
-// // Values returns all values (random order).
-// func (m *Map) Values() []interface{} {
-// 	values := make([]interface{}, m.Size())
-// 	count := 0
-// 	for _, value := range m.m {
-// 		values[count] = value
-// 		count++
-// 	}
-// 	return values
-// }
-
-// // Clear removes all elements from the map.
-// func (m *Map) Clear() {
-// 	m.m = make(map[interface{}]interface{})
-// }
-
-// // String returns a string representation of container
-// func (m *Map) String() string {
-// 	str := "HashMap\n"
-// 	str += fmt.Sprintf("%v", m.m)
-// 	return str
-// }
+func (m *CellMap) Clear() {
+	m.m = make(map[**simulation.Cell]*simulation.Cell)
+}
