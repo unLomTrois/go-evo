@@ -2,6 +2,7 @@ package main
 
 import (
 	"evo/internal/app/cellmap"
+	sim "evo/internal/app/simulation"
 	"evo/internal/app/utils"
 	"fmt"
 	"math/rand"
@@ -35,12 +36,12 @@ func run() {
 		second = time.Tick(time.Second)
 	)
 
-	cmap := cellmap.New(cfg.Bounds)
+	cmap := cellmap.New(win.Bounds())
 
 	imd := imdraw.New(nil)
 
 	// bounds of simulation
-	simbounds := cfg.Bounds //cfg.Bounds.Resized(cfg.Bounds.Center(), pixel.V(cfg.Bounds.W()-100, cfg.Bounds.H()-100))
+	simbounds := win.Bounds()
 
 	bounds := pixel.R(10, 10, 100, 100)
 
@@ -49,19 +50,23 @@ func run() {
 		dt := time.Since(last).Seconds()
 		last = time.Now()
 
+		// управление
+		if win.JustPressed(pixelgl.MouseButtonLeft) {
+			cmap.Put(sim.NewCell(win.MousePosition(), utils.RandColor(), 5))
+		}
+
+		// отрисовка
 		win.Clear(colornames.Black)
 		imd.Clear()
 
+		// update cells
 		for _, c := range cmap.GetM() {
 			c.Move()
-
 			c.CrossBorder(simbounds)
-
 			c.Draw(imd)
 		}
 
 		utils.DrawBounds(imd, bounds, colornames.Red)
-
 		imd.Draw(win)
 
 		// fps
@@ -70,10 +75,10 @@ func run() {
 		case <-second:
 			win.SetTitle(fmt.Sprintf("Cells: %d, FPS: %d, Delta: %f", cmap.Size(), frames, dt))
 			frames = 0
-			last := cmap.Keys()[cmap.Size()-1]
+			// last := cmap.Keys()[cmap.Size()-1]
 
-			cmap.Remove(last)
-			fmt.Println(last)
+			// cmap.Remove(last)
+			// fmt.Println(last)
 
 		default:
 		}

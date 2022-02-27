@@ -86,6 +86,7 @@ func (c *Cell) CrossBorder(bounds pixel.Rect) {
 	}
 }
 
+// отрисовывает клетку, должно идти до imd.Draw(win)
 func (c *Cell) Draw(imd *imdraw.IMDraw) {
 	utils.DrawCircle(imd, c.Position, c.Radius, c.Color, 0)
 }
