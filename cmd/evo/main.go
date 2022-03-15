@@ -2,6 +2,7 @@ package main
 
 import (
 	"evo/internal/app/cellmap"
+	"evo/internal/app/quadtree"
 	sim "evo/internal/app/simulation"
 	"evo/internal/app/utils"
 	"fmt"
@@ -23,7 +24,7 @@ func main() {
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "evo",
-		Bounds: pixel.R(0, 0, 1024, 720),
+		Bounds: pixel.R(0, 0, 800, 800),
 		// VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -43,7 +44,15 @@ func run() {
 	// bounds of simulation
 	simbounds := win.Bounds()
 
-	bounds := pixel.R(10, 10, 100, 100)
+	// bounds := pixel.R(10, 10, 100, 100)
+
+	qt := quadtree.NewQuadTree(simbounds)
+
+	for _, c := range cmap.GetM() {
+		qt.Insert(c)
+	}
+	// qt.Subdivide()
+	// qt.GetNW().Subdivide()
 
 	last := time.Now()
 	for !win.Closed() {
@@ -52,7 +61,10 @@ func run() {
 
 		// управление
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
-			cmap.Put(sim.NewCell(win.MousePosition(), utils.RandColor(), 5))
+			newcell := sim.NewCell(win.MousePosition(), utils.RandColor(), 5)
+
+			cmap.Put(newcell)
+			qt.Insert(newcell)
 		}
 
 		// отрисовка
@@ -61,12 +73,15 @@ func run() {
 
 		// update cells
 		for _, c := range cmap.GetM() {
-			c.Move()
-			c.CrossBorder(simbounds)
+			// c.Move()
+			// c.CrossBorder(simbounds)
 			c.Draw(imd)
 		}
+		// utils.DrawBounds(imd, pixel.R(200, 400, 400, 600), colornames.Red)
 
-		utils.DrawBounds(imd, bounds, colornames.Red)
+		// utils.DrawBounds(imd, bounds, colornames.Red)
+		// utils.DrawBounds(imd, qt.GetBounds(), colornames.Blue)
+		qt.Show(imd, colornames.Orange)
 		imd.Draw(win)
 
 		// fps
