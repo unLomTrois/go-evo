@@ -17,7 +17,7 @@ type CellMap struct {
 
 func New(bounds pixel.Rect) (cellmap *CellMap) {
 	cellmap = &CellMap{m: make(map[**sim.Cell]*sim.Cell)}
-	cells := sim.GenerateCells(100, bounds)
+	cells := sim.GenerateCells(200, bounds)
 
 	cellmap.PutSlice(cells)
 

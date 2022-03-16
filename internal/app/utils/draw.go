@@ -7,6 +7,13 @@ import (
 	"github.com/faiface/pixel/imdraw"
 )
 
+func DrawLine(imd *imdraw.IMDraw, u pixel.Vec, v pixel.Vec, color color.Color) {
+	imd.Color = color
+	imd.Push(u)
+	imd.Push(v)
+	imd.Line(1)
+}
+
 func DrawBounds(imd *imdraw.IMDraw, bounds pixel.Rect, color color.Color) {
 	DrawRectangle(imd, bounds, color, 1)
 }

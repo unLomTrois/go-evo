@@ -49,6 +49,12 @@ func (qt *QuadTree) GetBounds() pixel.Rect {
 	return qt.boundary
 }
 
+func (qt *QuadTree) InsertSlice(cells map[**sim.Cell]*sim.Cell) {
+	for _, c := range cells {
+		qt.Insert(c)
+	}
+}
+
 func (qt *QuadTree) Insert(cell *sim.Cell) bool {
 	if !qt.boundary.Contains(cell.Position) {
 		return false
@@ -66,9 +72,21 @@ func (qt *QuadTree) Insert(cell *sim.Cell) bool {
 			return true
 		}
 	}
+	if qt.nw.Insert(cell) {
+		return true
+	}
+	if qt.ne.Insert(cell) {
+		return true
+	}
+	if qt.sw.Insert(cell) {
+		return true
+	}
+	if qt.se.Insert(cell) {
+		return true
+	}
 
 	// fmt.Println("try to insert point into children")
-	return qt.nw.Insert(cell) || qt.ne.Insert(cell) || qt.sw.Insert(cell) || qt.se.Insert(cell)
+	return false
 }
 
 func (qt *QuadTree) Subdivide() bool {
@@ -101,7 +119,7 @@ func (qt *QuadTree) Subdivide() bool {
 }
 
 func (qt *QuadTree) Show(imd *imdraw.IMDraw, color color.Color) {
-	utils.DrawBounds(imd, qt.GetBounds(), color)
+	utils.DrawBounds(imd, qt.boundary, color)
 
 	if qt.is_divided {
 		qt.nw.Show(imd, colornames.Red)
@@ -109,4 +127,39 @@ func (qt *QuadTree) Show(imd *imdraw.IMDraw, color color.Color) {
 		qt.sw.Show(imd, colornames.Green)
 		qt.se.Show(imd, colornames.Yellow)
 	}
+}
+
+func (qt *QuadTree) Query(boundary pixel.Rect) (cells []*sim.Cell) {
+	// cells := make([]*sim.Cell, 0)
+
+	if !qt.boundary.Intersects(boundary) {
+		return
+	}
+
+	for _, p := range qt.points {
+		if boundary.Contains(p.Position) {
+			// fmt.Println(p)
+			cells = append(cells, p)
+		}
+	}
+
+	if !qt.is_divided {
+		return
+	}
+
+	cells = append(cells, qt.nw.Query(boundary)...)
+	cells = append(cells, qt.ne.Query(boundary)...)
+	cells = append(cells, qt.sw.Query(boundary)...)
+	cells = append(cells, qt.se.Query(boundary)...)
+
+	return
+}
+
+func (qt *QuadTree) Clear() {
+	qt.nw = nil
+	qt.ne = nil
+	qt.sw = nil
+	qt.se = nil
+	qt.is_divided = false
+	qt.points = make([]*sim.Cell, 0)
 }
