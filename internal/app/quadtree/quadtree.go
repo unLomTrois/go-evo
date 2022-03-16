@@ -35,10 +35,6 @@ func NewQuadTree(boundary pixel.Rect) *QuadTree {
 	}
 }
 
-func (qt *QuadTree) GetBounds() pixel.Rect {
-	return qt.boundary
-}
-
 func (qt *QuadTree) InsertSlice(cells map[**sim.Cell]*sim.Cell) {
 	for _, c := range cells {
 		qt.Insert(c)
