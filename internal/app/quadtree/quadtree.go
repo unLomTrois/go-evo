@@ -10,14 +10,6 @@ import (
 	"golang.org/x/image/colornames"
 )
 
-type IQuadTree interface {
-	Insert() bool
-	Subdivide() bool
-	Update()
-	Collide()
-	Query() []*sim.Cell
-}
-
 type QuadTree struct {
 	is_divided bool
 	capacity   int
