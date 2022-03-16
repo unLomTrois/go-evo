@@ -47,7 +47,7 @@ func run() {
 	// bounds := pixel.R(utils.RandBetween(0, 400), utils.RandBetween(0, 400), utils.RandBetween(400, 800), utils.RandBetween(400, 800))
 
 	qt := quadtree.NewQuadTree(simbounds)
-	qt.InsertSlice(cmap.GetM())
+	qt.InsertMap(cmap.GetM())
 
 	last := time.Now()
 	for !win.Closed() {
@@ -83,8 +83,7 @@ func run() {
 			}
 		}
 
-		qt.Clear()
-		qt.InsertSlice(cmap.GetM())
+		qt.Update(cmap.GetM())
 		// utils.DrawBounds(imd, pixel.R(200, 400, 400, 600), colornames.Red)
 
 		// utils.DrawBounds(imd, bounds, colornames.Red)
