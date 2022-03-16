@@ -20,7 +20,6 @@ type IQuadTree interface {
 
 type QuadTree struct {
 	is_divided bool
-	parent     *QuadTree
 	capacity   int
 	points     []*sim.Cell
 	boundary   pixel.Rect
@@ -34,7 +33,6 @@ type QuadTree struct {
 func NewQuadTree(boundary pixel.Rect) *QuadTree {
 	return &QuadTree{
 		is_divided: false,
-		parent:     nil,
 		capacity:   4,
 		points:     make([]*sim.Cell, 0),
 		boundary:   boundary,
@@ -97,11 +95,6 @@ func (qt *QuadTree) Subdivide() bool {
 	qt.ne = NewQuadTree(pixel.R(qt.boundary.Center().X, qt.boundary.Center().Y, qt.boundary.Max.X, qt.boundary.Max.Y))
 	qt.sw = NewQuadTree(pixel.R(qt.boundary.Center().X-qt.boundary.W()/2, qt.boundary.Min.Y, qt.boundary.Center().X, qt.boundary.Center().Y))
 	qt.se = NewQuadTree(pixel.R(qt.boundary.Center().X, qt.boundary.Min.Y, qt.boundary.Center().X+qt.boundary.W()/2, qt.boundary.Center().Y))
-
-	qt.nw.parent = qt
-	qt.ne.parent = qt
-	qt.sw.parent = qt
-	qt.se.parent = qt
 
 	ret := false
 	for _, p := range qt.points {
