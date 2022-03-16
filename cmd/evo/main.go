@@ -89,7 +89,7 @@ func run() {
 
 		// utils.DrawBounds(imd, bounds, colornames.Red)
 		// utils.DrawBounds(imd, qt.GetBounds(), colornames.Blue)
-		qt.Show(imd, colornames.Orange)
+		// qt.Show(imd, colornames.Orange)
 		imd.Draw(win)
 
 		// fps
