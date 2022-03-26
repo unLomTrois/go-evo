@@ -56,7 +56,7 @@ func run() {
 
 		// управление
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
-			newcell := sim.NewCell(win.MousePosition(), utils.RandColor(), 5)
+			newcell := sim.NewCell(win.MousePosition(), utils.RandColor(), utils.RandBetween(0, 5))
 
 			cmap.Put(newcell)
 			qt.Insert(newcell)
