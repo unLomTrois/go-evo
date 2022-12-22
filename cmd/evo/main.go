@@ -83,12 +83,11 @@ func run() {
 			}
 		}
 
-		qt.Update(cmap.GetM())
 		// utils.DrawBounds(imd, pixel.R(200, 400, 400, 600), colornames.Red)
 
 		// utils.DrawBounds(imd, bounds, colornames.Red)
 		// utils.DrawBounds(imd, qt.GetBounds(), colornames.Blue)
-		// qt.Show(imd, colornames.Orange)
+		qt.Show(imd, colornames.Orange)
 		imd.Draw(win)
 
 		// fps
@@ -96,6 +95,7 @@ func run() {
 		select {
 		case <-second:
 			win.SetTitle(fmt.Sprintf("Cells: %d, FPS: %d, Delta: %f", cmap.Size(), frames, dt))
+			qt.Update(cmap.GetM())
 			frames = 0
 
 			// last := cmap.Keys()[cmap.Size()-1]
