@@ -79,10 +79,38 @@ func (qt *QuadTree) Subdivide() bool {
 	qt.is_divided = true
 
 	// переписать
-	qt.nw = NewQuadTree(pixel.R(qt.boundary.Center().X-qt.boundary.W()/2, qt.boundary.Center().Y, qt.boundary.Center().X, qt.boundary.Max.Y))
-	qt.ne = NewQuadTree(pixel.R(qt.boundary.Center().X, qt.boundary.Center().Y, qt.boundary.Max.X, qt.boundary.Max.Y))
-	qt.sw = NewQuadTree(pixel.R(qt.boundary.Center().X-qt.boundary.W()/2, qt.boundary.Min.Y, qt.boundary.Center().X, qt.boundary.Center().Y))
-	qt.se = NewQuadTree(pixel.R(qt.boundary.Center().X, qt.boundary.Min.Y, qt.boundary.Center().X+qt.boundary.W()/2, qt.boundary.Center().Y))
+	qt.nw = NewQuadTree(
+		pixel.R(
+			qt.boundary.Center().X-qt.boundary.W()/2,
+			qt.boundary.Center().Y,
+			qt.boundary.Center().X,
+			qt.boundary.Max.Y,
+		),
+	)
+	qt.ne = NewQuadTree(
+		pixel.R(
+			qt.boundary.Center().X,
+			qt.boundary.Center().Y,
+			qt.boundary.Max.X,
+			qt.boundary.Max.Y,
+		),
+	)
+	qt.sw = NewQuadTree(
+		pixel.R(
+			qt.boundary.Center().X-qt.boundary.W()/2,
+			qt.boundary.Min.Y,
+			qt.boundary.Center().X,
+			qt.boundary.Center().Y,
+		),
+	)
+	qt.se = NewQuadTree(
+		pixel.R(
+			qt.boundary.Center().X,
+			qt.boundary.Min.Y,
+			qt.boundary.Center().X+qt.boundary.W()/2,
+			qt.boundary.Center().Y,
+		),
+	)
 
 	ret := false
 	for _, p := range qt.points {

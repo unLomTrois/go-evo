@@ -18,7 +18,13 @@ type Cell struct {
 }
 
 func NewCell(position pixel.Vec, color color.Color, radius float64) *Cell {
-	return &Cell{position, color, radius, utils.RandBetween(-2*math.Pi, 2*math.Pi), utils.RandBetween(0, 1)}
+	return &Cell{
+		position,
+		color,
+		radius,
+		utils.RandBetween(-2*math.Pi, 2*math.Pi),
+		utils.RandBetween(0, 1),
+	}
 	// utils.RandBetween(-2*math.Pi, 2*math.Pi)
 }
 

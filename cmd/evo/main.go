@@ -73,7 +73,12 @@ func run() {
 			c.Draw(imd)
 
 			// find nearest neighbors
-			searchzone := pixel.R(c.Position.X-40, c.Position.Y-40, c.Position.X+40, c.Position.Y+40)
+			searchzone := pixel.R(
+				c.Position.X-40,
+				c.Position.Y-40,
+				c.Position.X+40,
+				c.Position.Y+40,
+			)
 			neighbors := qt.Query(searchzone)
 			// utils.DrawCircle(imd, c.Position, 40, c.Color, 1)
 			if len(neighbors) > 0 {

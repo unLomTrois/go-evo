@@ -25,7 +25,13 @@ func DrawRectangle(imd *imdraw.IMDraw, bounds pixel.Rect, color color.Color, thi
 	imd.Rectangle(thickness)
 }
 
-func DrawCircle(imd *imdraw.IMDraw, pos pixel.Vec, radius float64, color color.Color, thickness float64) {
+func DrawCircle(
+	imd *imdraw.IMDraw,
+	pos pixel.Vec,
+	radius float64,
+	color color.Color,
+	thickness float64,
+) {
 	imd.Color = color
 	imd.Push(pos)
 	imd.Circle(radius, thickness)
